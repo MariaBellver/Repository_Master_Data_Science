@@ -1,0 +1,18 @@
+Resumen del trabajo realizado.
+
+Una vez con los datos cargados, realizamos un correlograma con el fin de buscar posibles relaciones entre las variables y tras esto hemos estudiado la cantidad de datos faltantes para los conjuntos de modelar y de estimar.
+
+Debido a que el conjunto de modelar tiene diversas variables con una grán cantidad de datos faltantes por encima del 20% del total de datos de conjunto, con el fin de reducir la dimensionalidad de los datos se va a eliminar aquellas variables cuya cantidad de datos faltantes sea mayor del 20 %, de esta forma  todas las variables que comienzan por el nombre IDEA, serán elimandas, así como  las variables HY_precio_anterior, HY_cod_postal, HY_cert_energ, HY_distribucion, HY_antiguedad, HY_descripcion, HY_metros_utiles , HY_provincia , GA_quincena_ini , GA_quincena_ult. Se crearán 4 variables nuevas que serán el conteo de la longitud de caracteres en las descripciones, el número de fotos asociadas al inmueble, la diferencia entre las quincenas (para saber cuantas quincenas ha estado el anuncio colgado) y la diferencia de precios (en el caso que se haya dado una rebaja).
+De la misma forma se va a imputar la variable HY_metros_totales para el conjunto de modelar y estimar.
+
+Realizamos un Boxplot de las variables que hemos decidido mantener tras el preprocesado de los datos y observamos que prácticamente en la mayoría de las variables observamos datos outliers.A la hora de obtener los valores predecidos para aquellos  valoros de HY_Exit_rate=100, no se va a realizar la predicción, a consecuencia de que en todos los casos el valor de la TARGET es cero. Como último paso del análisis exploratorio se realiza un histograma del número de inmuebles por cada tipo de inmueble.
+
+Tras esto, se han definido las funciones que emplearemos para obtener el modelo de predicción para los datos del conjunto modelar y posteriormente para los del conjunto estimar.
+Para ello hemos haremos uso de un método ensamble, concretamente un stacked generalization, para ello emplearemos como predictor base un Bagging con estimador base RANSACRegressor y un predictor base Ransac con estimador base RandomForest, se emplea el método RANSACRegressor, debido a que nuestros conjuntos de datos contienen valores atípicos y esto afectará a la calidad de nuestro modelo si no es tomado en cuenta. Para el segundo nivel emplearemos para el metapredictor SVR. 
+
+Así mismo, a raíz de que tenemos diferentes tipos de inmuebles, se ha considerado que resulta adecuado realizar una serie de agrupaciones, de forma que los inmuebles que puedan resultar similares estén en el mismo grupo, con el fin de obtener mejores predicciones para los conjuntos de estimar y modelar.
+
+
+Finalmente, a la hora de obtener las predicciones para el conjunto de modelar y de estimar, es de vital importancia destacar que debido a la creación de los 5 subconjuntos anteriores, el orden original de los datos ha sido modificado, no obstante se han tomado las precauciones pertinentes para asegurar que los datos estén correctamente asociados entre si. Esto será importante a la hora de obtener las predicciones del conjunto de estimar ya que tenemos que asociar la predicción al id de dicho inmueble.
+
+NOTA: Nuestro script accede al directorio donde están las imágenes, para contar cuantas imagenes hay de cada inmueble, es necesario establecer dicha ruta para la ejecución correcta del mismo. La variable está establecida en la carga de los conjuntos de datos y se denomina DirImagenes.
